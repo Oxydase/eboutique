@@ -5,6 +5,9 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
+        <!-- Semantic UI CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
+
         {% endblock %}
 
         {% block javascripts %}
@@ -12,6 +15,32 @@
         {% endblock %}
     </head>
     <body>
+        {% block header %}
+        <div class="ui menu">
+            <div class="header item">
+                <i class="shopping bag icon"></i> Ma e-Boutique
+            </div>
+
+            <a href="{{ path('app_home') }}" class="item">Accueil</a>
+            <a href="{{ path('app_home') }}" class="item">Boutique</a>
+
+            <div class="right menu">
+                {% if app.user %}
+                <div class="item">
+                    <i class="user icon"></i> {{ app.user.email }}
+                </div>
+                <a href="{{ path('app_logout') }}" class="item">
+                    <i class="sign out alternate icon"></i> Déconnexion
+                </a>
+                {% else %}
+                <a href="{{ path('app_login') }}" class="item">
+                    <i class="sign in alternate icon"></i> Connexion
+                </a>
+                {% endif %}
+            </div>
+            </div>
+
+        {% endblock %}
         {% block body %}{% endblock %}
     </body>
 </html>
