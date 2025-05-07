@@ -22,73 +22,56 @@ class Category
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    /**
-     * @var Collection<int, Product>
-     */
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category')]
-    private Collection $j;
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class)]
+    private Collection $products;
 
     public function __construct()
     {
-        $this->j = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    public function getId(): ?int { return $this->id; }
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
+    public function getName(): ?string { return $this->name; }
 
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
+    public function getDescription(): ?string { return $this->description; }
 
     public function setDescription(?string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
     /**
      * @return Collection<int, Product>
      */
-    public function getJ(): Collection
+    public function getProducts(): Collection
     {
-        return $this->j;
+        return $this->products;
     }
 
-    public function addJ(Product $j): static
+    public function addProduct(Product $product): static
     {
-        if (!$this->j->contains($j)) {
-            $this->j->add($j);
-            $j->setCategory($this);
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->setCategory($this);
         }
-
         return $this;
     }
 
-    public function removeJ(Product $j): static
+    public function removeProduct(Product $product): static
     {
-        if ($this->j->removeElement($j)) {
-            // set the owning side to null (unless already changed)
-            if ($j->getCategory() === $this) {
-                $j->setCategory(null);
+        if ($this->products->removeElement($product)) {
+            if ($product->getCategory() === $this) {
+                $product->setCategory(null);
             }
         }
-
         return $this;
     }
 }

@@ -28,25 +28,17 @@ class Product
     #[ORM\Column]
     private ?bool $available = null;
 
-    #[ORM\ManyToOne(inversedBy: 'j')]
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    /**
-     * @var Collection<int, Media>
-     */
-    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'd')]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Media::class, cascade: ['persist', 'remove'])]
     private Collection $media;
 
-    /**
-     * @var Collection<int, CartLine>
-     */
-    #[ORM\OneToMany(targetEntity: CartLine::class, mappedBy: 'a')]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: CartLine::class)]
     private Collection $cartLines;
 
-    /**
-     * @var Collection<int, CommandLine>
-     */
-    #[ORM\OneToMany(targetEntity: CommandLine::class, mappedBy: 'd')]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: CommandLine::class)]
     private Collection $commandLines;
 
     public function __construct()
@@ -56,158 +48,116 @@ class Product
         $this->commandLines = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    public function getId(): ?int { return $this->id; }
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
+    public function getName(): ?string { return $this->name; }
 
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
+    public function getDescription(): ?string { return $this->description; }
 
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
-    public function getPriceHT(): ?float
-    {
-        return $this->priceHT;
-    }
+    public function getPriceHT(): ?float { return $this->priceHT; }
 
     public function setPriceHT(float $priceHT): static
     {
         $this->priceHT = $priceHT;
-
         return $this;
     }
 
-    public function isAvailable(): ?bool
-    {
-        return $this->available;
-    }
+    public function isAvailable(): ?bool { return $this->available; }
 
     public function setAvailable(bool $available): static
     {
         $this->available = $available;
-
         return $this;
     }
 
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
+    public function getCategory(): ?Category { return $this->category; }
 
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
-
         return $this;
     }
 
     /**
      * @return Collection<int, Media>
      */
-    public function getMedia(): Collection
-    {
-        return $this->media;
-    }
+    public function getMedia(): Collection { return $this->media; }
 
-    public function addMedium(Media $medium): static
+    public function addMedia(Media $media): static
     {
-        if (!$this->media->contains($medium)) {
-            $this->media->add($medium);
-            $medium->setD($this);
+        if (!$this->media->contains($media)) {
+            $this->media->add($media);
+            $media->setProduct($this);
         }
-
         return $this;
     }
 
-    public function removeMedium(Media $medium): static
+    public function removeMedia(Media $media): static
     {
-        if ($this->media->removeElement($medium)) {
-            // set the owning side to null (unless already changed)
-            if ($medium->getD() === $this) {
-                $medium->setD(null);
+        if ($this->media->removeElement($media)) {
+            if ($media->getProduct() === $this) {
+                $media->setProduct(null);
             }
         }
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, CartLine>
-     */
-    public function getCartLines(): Collection
+    public function getMainImage(): ?Media
     {
-        return $this->cartLines;
+        return $this->media->first() ?: null;
     }
+
+    public function getCartLines(): Collection { return $this->cartLines; }
 
     public function addCartLine(CartLine $cartLine): static
     {
         if (!$this->cartLines->contains($cartLine)) {
             $this->cartLines->add($cartLine);
-            $cartLine->setA($this);
+            $cartLine->setProduct($this);
         }
-
         return $this;
     }
 
     public function removeCartLine(CartLine $cartLine): static
     {
         if ($this->cartLines->removeElement($cartLine)) {
-            // set the owning side to null (unless already changed)
-            if ($cartLine->getA() === $this) {
-                $cartLine->setA(null);
+            if ($cartLine->getProduct() === $this) {
+                $cartLine->setProduct(null);
             }
         }
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, CommandLine>
-     */
-    public function getCommandLines(): Collection
-    {
-        return $this->commandLines;
-    }
+    public function getCommandLines(): Collection { return $this->commandLines; }
 
     public function addCommandLine(CommandLine $commandLine): static
     {
         if (!$this->commandLines->contains($commandLine)) {
             $this->commandLines->add($commandLine);
-            $commandLine->setD($this);
+            $commandLine->setProduct($this);
         }
-
         return $this;
     }
 
     public function removeCommandLine(CommandLine $commandLine): static
     {
         if ($this->commandLines->removeElement($commandLine)) {
-            // set the owning side to null (unless already changed)
-            if ($commandLine->getD() === $this) {
-                $commandLine->setD(null);
+            if ($commandLine->getProduct() === $this) {
+                $commandLine->setProduct(null);
             }
         }
-
         return $this;
     }
 }
