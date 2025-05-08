@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\CategoryRepository;
+use App\Entity\Category;
 
 
 final class CategoryController extends AbstractController
@@ -21,7 +22,7 @@ final class CategoryController extends AbstractController
     }
 
     #[Route('/category/{id}', name: 'category_show')]
-    public function show(CategoryRepository $category): Response
+    public function show(Category $category): Response
     {
         return $this->render('category/show.html.twig', [
             'category' => $category,

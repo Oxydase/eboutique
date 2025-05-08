@@ -16,6 +16,8 @@
                     <br>
                     {% if product.mainImage %}
                         <img src="{{ asset(product.mainImage.path) }}" alt="{{ product.name }}" width="200">
+                        <a href="{{ path('cart_add', {id: product.id}) }}" class="btn btn-primary">Ajouter au panier</a>
+
                     {% else %}
                         <p>Pas d'image</p>
                     {% endif %}

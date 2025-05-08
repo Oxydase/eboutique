@@ -35,17 +35,9 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Media::class, cascade: ['persist', 'remove'])]
     private Collection $media;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: CartLine::class)]
-    private Collection $cartLines;
-
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: CommandLine::class)]
-    private Collection $commandLines;
-
     public function __construct()
     {
         $this->media = new ArrayCollection();
-        $this->cartLines = new ArrayCollection();
-        $this->commandLines = new ArrayCollection();
     }
 
     public function getId(): ?int { return $this->id; }
@@ -117,47 +109,5 @@ class Product
     public function getMainImage(): ?Media
     {
         return $this->media->first() ?: null;
-    }
-
-    public function getCartLines(): Collection { return $this->cartLines; }
-
-    public function addCartLine(CartLine $cartLine): static
-    {
-        if (!$this->cartLines->contains($cartLine)) {
-            $this->cartLines->add($cartLine);
-            $cartLine->setProduct($this);
-        }
-        return $this;
-    }
-
-    public function removeCartLine(CartLine $cartLine): static
-    {
-        if ($this->cartLines->removeElement($cartLine)) {
-            if ($cartLine->getProduct() === $this) {
-                $cartLine->setProduct(null);
-            }
-        }
-        return $this;
-    }
-
-    public function getCommandLines(): Collection { return $this->commandLines; }
-
-    public function addCommandLine(CommandLine $commandLine): static
-    {
-        if (!$this->commandLines->contains($commandLine)) {
-            $this->commandLines->add($commandLine);
-            $commandLine->setProduct($this);
-        }
-        return $this;
-    }
-
-    public function removeCommandLine(CommandLine $commandLine): static
-    {
-        if ($this->commandLines->removeElement($commandLine)) {
-            if ($commandLine->getProduct() === $this) {
-                $commandLine->setProduct(null);
-            }
-        }
-        return $this;
     }
 }
