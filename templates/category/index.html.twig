@@ -13,19 +13,21 @@
 
             {% if category.products|length > 0 %}
                 <ul>
-                    {% for product in category.products %}
+                    {% for product in category.products|slice(0, 3) %}
                         <li>
-                            <strong>{{ product.name }}</strong> – {{ product.priceHt }} €
+                            <strong>{{ product.name }}</strong> – {{ product.priceHT }} €
                             <br>
                             <em>{{ product.description }}</em>
-                        </li>
-                        {% if product.mainImage %}
-                            <img src="{{ asset(product.mainImage.path) }}" alt="{{ product.name }}">
+                            <br>
+                            {% if product.mainImage %}
+                                <img src="{{ asset(product.mainImage.path) }}" alt="{{ product.name }}" width="150">
                             {% else %}
-                            <p>Pas d'image</p>
-                        {% endif %}
+                                <p>Pas d'image</p>
+                            {% endif %}
+                        </li>
                     {% endfor %}
                 </ul>
+                <a href="{{ path('category_show', { id: category.id }) }}">Voir tous les produits</a>
             {% else %}
                 <p><em>Aucun produit dans cette catégorie.</em></p>
             {% endif %}

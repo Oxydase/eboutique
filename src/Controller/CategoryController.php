@@ -19,4 +19,12 @@ final class CategoryController extends AbstractController
             'categories' => $categories,
         ]);
     }
+
+    #[Route('/category/{id}', name: 'category_show')]
+    public function show(CategoryRepository $category): Response
+    {
+        return $this->render('category/show.html.twig', [
+            'category' => $category,
+        ]);
+    }
 }

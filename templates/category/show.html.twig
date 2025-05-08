@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block body %}
+    <h1>{{ category.name }}</h1>
+    <p>{{ category.description }}</p>
+
+    {% if category.products|length > 0 %}
+        <ul>
+            {% for product in category.products %}
+                <li style="margin-bottom: 1.5rem;">
+                    <strong>{{ product.name }}</strong> – {{ product.priceHT }} €
+                    <br>
+                    <em>{{ product.description }}</em>
+                    <br>
+                    {% if product.mainImage %}
+                        <img src="{{ asset(product.mainImage.path) }}" alt="{{ product.name }}" width="200">
+                    {% else %}
+                        <p>Pas d'image</p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p><em>Aucun produit trouvé dans cette catégorie.</em></p>
+    {% endif %}
+
+    <a href="{{ path('category_index') }}">← Retour aux catégories</a>
+{% endblock %}
