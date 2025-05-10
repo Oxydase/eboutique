@@ -1,36 +1,67 @@
-{# templates/category/index.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Catégories{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .ui.card {
+            background-color: white !important; /* Fond blanc pour la carte */
+            color: black !important; /* Texte noir */
+        }
+        .ui.card .content {
+            color: black !important; /* Texte dans la carte en noir */
+        }
+        .ui.button {
+            background-color: #2185d0; /* Couleur du bouton */
+            color: white;
+        }
+        .ui.button:hover {
+            background-color: #1678b8;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
-    <h1>Liste des Catégories</h1>
+<div class="ui container" style="margin-top: 2em;">
+    <h1 class="ui header">Liste des Catégories</h1>
 
-    {% for category in categories %}
-        <div style="margin-bottom: 2rem;">
-            <h2>{{ category.name }}</h2>
-            <p>{{ category.description }}</p>
+    <div class="ui grid">
+        {% for category in categories %}
+            <div class="four wide column">
+                <div class="ui card" style="margin-bottom: 2rem;">
+                    <div class="content">
+                        <h2 class="ui header">{{ category.name }}</h2>
+                        <p>{{ category.description }}</p>
+                    </div>
 
-            {% if category.products|length > 0 %}
-                <ul>
-                    {% for product in category.products|slice(0, 3) %}
-                        <li>
-                            <strong>{{ product.name }}</strong> – {{ product.priceHT }} €
-                            <br>
-                            <em>{{ product.description }}</em>
-                            <br>
-                            {% if product.mainImage %}
-                                <img src="{{ asset(product.mainImage.path) }}" alt="{{ product.name }}" width="150">
-                            {% else %}
-                                <p>Pas d'image</p>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
-                <a href="{{ path('category_show', { id: category.id }) }}">Voir tous les produits</a>
-            {% else %}
-                <p><em>Aucun produit dans cette catégorie.</em></p>
-            {% endif %}
-        </div>
-    {% endfor %}
+                    {% if category.products|length > 0 %}
+                        <div class="extra content">
+                            <ul class="ui list">
+                                {% for product in category.products|slice(0, 3) %}
+                                    <li class="item">
+                                        <strong>{{ product.name }}</strong> – {{ product.priceHT }} €
+                                        <br>
+                                        <em>{{ product.description }}</em>
+                                        <br>
+                                        {% if product.mainImage %}
+                                            <img class="ui small image" src="{{ asset(product.mainImage.path) }}" alt="{{ product.name }}">
+                                        {% else %}
+                                            <p>Pas d'image</p>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <a href="{{ path('category_show', { id: category.id }) }}" class="ui button primary">Voir tous les produits</a>
+                        </div>
+                    {% else %}
+                        <div class="extra content">
+                            <p><em>Aucun produit dans cette catégorie.</em></p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

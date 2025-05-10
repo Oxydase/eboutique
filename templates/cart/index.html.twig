@@ -8,14 +8,43 @@
 {% if items is empty %}
     <p>Votre panier est vide.</p>
 {% else %}
-    <ul>
-        {% for item in items %}
-            <li>
-                <strong>{{ item.product.name }}</strong> – {{ item.quantity }} × {{ item.product.priceHT }} €
-                <a href="{{ path('cart_remove', {id: item.product.id}) }}">Supprimer</a>
-            </li>
-        {% endfor %}
-    </ul>
+    <table class="ui celled table">
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Prix unitaire</th>
+                <th>Sous-total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>
+                        <form method="post" action="{{ path('cart_update', {id: item.product.id}) }}">
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" style="width: 60px;">
+                            <button type="submit" class="ui mini button blue">Mettre à jour</button>
+                        </form>
+                    </td>
+                    <td>{{ item.product.priceHT }} €</td>
+                    <td>{{ (item.product.priceHT * item.quantity)|number_format(2, '.', ' ') }} €</td>
+                    <td>
+                        <a href="{{ path('cart_remove', {id: item.product.id}) }}" class="ui mini button red">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" style="text-align: right;"><strong>Total :</strong></td>
+                <td colspan="2"><strong>{{ total|number_format(2, '.', ' ') }} €</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+
+<a href="{{ path('cart_clear') }}" class="ui button green">Payer (vider le panier)</a>
 
     <p><strong>Total :</strong> {{ total }} €</p>
 

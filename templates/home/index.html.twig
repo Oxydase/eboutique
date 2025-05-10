@@ -1,20 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Bienvenue sur notre boutique{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="ui container" style="margin-top: 2em;">
+    <h1 class="ui header">Bienvenue sur notre boutique</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/xampp/htdocs/Symfony/eboutique/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>C:/xampp/htdocs/Symfony/eboutique/templates/home/index.html.twig</code></li>
-    </ul>
+    <div class="ui three stackable cards">
+        {% for product in products %}
+            <div class="ui medium card">
+                <div class="image centered">
+                    {% if product.media is defined and product.media is not empty %}
+                        <img class="ui medium image" src="{{ asset(product.media[0].path) }}" alt="{{ product.name }}">
+                    {% else %}
+                        <img class="ui medium image" src="{{ asset('images/default.jpg') }}" alt="Image par défaut">
+                    {% endif %}
+                </div>
+                <div class="content">
+                    <div class="header">{{ product.name }}</div>
+                    <div class="description">
+                        {{ product.description|slice(0, 100) ~ '...' }}
+                    </div>
+                </div>
+                <div class="extra content">
+                    <strong>{{ product.priceHT }} €</strong>
+                    <a href="{{ path('cart_add', {id: product.id}) }}" class="ui button right floated">
+                        Ajouter au panier
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
