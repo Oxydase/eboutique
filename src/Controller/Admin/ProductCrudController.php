@@ -27,7 +27,6 @@ class ProductCrudController extends AbstractCrudController
             NumberField::new('price_ht') // Utilisation de NumberField pour gérer le champ price_ht (double)
                 ->setFormTypeOption('attr', ['step' => 'any']) // Permet d'accepter des valeurs avec des décimales
                 ->setRequired(true), // Si tu veux rendre ce champ obligatoire
-            TextField::new('available'),
             AssociationField::new('category')
                 ->setFormTypeOption('choice_label', 'name'),
         ];
