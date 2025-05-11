@@ -3,12 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Product;
-use App\Entity\Category; // Assurez-vous d'importer l'entité Category
+use App\Entity\Category;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField; // Importation du champ AssociationField
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField; // Utilisation de NumberField pour gérer des valeurs numériques
 
 class ProductCrudController extends AbstractCrudController
 {
@@ -21,12 +22,14 @@ class ProductCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id'),
-            TextField::new('name'), // Ajouter les autres champs ici selon ta table Product
+            TextField::new('name'),
             TextEditorField::new('description'),
-            TextField::new('price_ht'),
+            NumberField::new('price_ht') // Utilisation de NumberField pour gérer le champ price_ht (double)
+                ->setFormTypeOption('attr', ['step' => 'any']) // Permet d'accepter des valeurs avec des décimales
+                ->setRequired(true), // Si tu veux rendre ce champ obligatoire
             TextField::new('available'),
-            AssociationField::new('category') // Ajouter le champ category ici pour la sélection de la catégorie
-                ->setFormTypeOption('choice_label', 'name') // Choisir le champ 'name' pour afficher les catégories dans la liste déroulante
+            AssociationField::new('category')
+                ->setFormTypeOption('choice_label', 'name'),
         ];
     }
 }
