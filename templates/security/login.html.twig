@@ -2,36 +2,70 @@
 
 {% block title %}Log in!{% endblock %}
 
-{% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-color: #1f1f1f;
+        }
+        .ui.form {
+            max-width: 400px;
+            margin: auto;
+            margin-top: 4rem;
+        }
+        .ui.form h2.ui.header,
+        .ui.form label {
+            color: white !important;
+        }
+        .ui.black.button {
+            background-color: black !important;
+            color: white !important;
+        }
+        .ui.black.button:hover {
+            background-color: #333 !important;
+        }
+    </style>
+{% endblock %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+{% block body %}
+<div class="ui container">
+    {% if error %}
+        <div class="ui negative message">
+            <div class="header">Erreur d'identification</div>
+            <p>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
         </div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+    {% if app.user %}
+        <div class="ui positive message">
+            Vous êtes connecté en tant que <strong>{{ app.user.userIdentifier }}</strong>.
+            <a href="{{ path('app_logout') }}">Déconnexion</a>
+        </div>
+    {% endif %}
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+    <form method="post" class="ui form">
+        <h2 class="ui header">Connexion</h2>
 
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
-    </div>
+        <div class="field">
+            <label for="inputEmail">Email</label>
+            <input type="email" id="inputEmail" name="email" value="{{ last_username }}" placeholder="Votre email" required autofocus>
+        </div>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+        <div class="field">
+            <label for="inputPassword">Mot de passe</label>
+            <input type="password" id="inputPassword" name="password" placeholder="Mot de passe" required>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        <div class="field">
+            <div class="ui checkbox">
+                <input type="checkbox" name="_remember_me" id="rememberMe">
+                <label for="rememberMe">Se souvenir de moi</label>
+            </div>
+        </div>
+
+        <button class="ui black button fluid" type="submit">Se connecter</button>
+    </form>
+</div>
 {% endblock %}

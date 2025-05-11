@@ -19,6 +19,9 @@
         .ui.button:hover {
             background-color: #1678b8;
         }
+        .ui.bulleted.list .list>a.item:before, .ui.bulleted.list>a.item:before, ul.ui.list li:before {
+            color: #fff;
+        }
     </style>
 {% endblock %}
 
@@ -38,7 +41,7 @@
                     {% if category.products|length > 0 %}
                         <div class="extra content">
                             <ul class="ui list">
-                                {% for product in category.products|slice(0, 3) %}
+                                {% for product in category.products|slice(0, 1) %}
                                     <li class="item">
                                         <strong>{{ product.name }}</strong> – {{ product.priceHT }} €
                                         <br>
@@ -52,7 +55,7 @@
                                     </li>
                                 {% endfor %}
                             </ul>
-                            <a href="{{ path('category_show', { id: category.id }) }}" class="ui button primary">Voir tous les produits</a>
+                            <a href="{{ path('category_show', { id: category.id }) }}" class="ui button primary">Voir tous les produits de cette catégorie</a>
                         </div>
                     {% else %}
                         <div class="extra content">

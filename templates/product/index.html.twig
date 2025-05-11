@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tous nos produits{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-color: #1f1f1f !important;
+            color: white;
+        }
+        .ui.card {
+            background-color: white !important;
+            color: black !important;
+        }
+        .ui.card .image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            overflow: hidden;
+            background: #f9f9f9;
+        }
+        .ui.card .image img {
+            object-fit: cover;
+            height: 100%;
+            width: auto;
+            max-width: 100%;
+        }
+        .ui.button {
+            background-color: black !important;
+            color: white !important;
+        }
+        .ui.button:hover {
+            background-color: #333 !important;
+        }
+        .ui.header {
+            color: white !important;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="ui container" style="margin-top: 2em;">
+    <h1 class="ui header">Tous nos produits</h1>
+
+    <div class="ui stackable four cards">
+        {% for product in products %}
+            <div class="ui card">
+                <div class="image">
+                    {% if product.media is defined and product.media|length > 0 %}
+                        <img src="{{ asset(product.media[0].path) }}" alt="{{ product.name }}">
+                    {% else %}
+                        <img src="{{ asset('images/default.jpg') }}" alt="Image par défaut">
+                    {% endif %}
+                </div>
+                <div class="content">
+                    <div class="header">{{ product.name }}</div>
+                    <div class="description">
+                        {{ product.description|slice(0, 80) ~ '...' }}
+                    </div>
+                </div>
+                <div class="extra content">
+                    <strong>{{ product.priceHT }} €</strong>
+                    <a href="{{ path('cart_add', { id: product.id }) }}" class="ui button right floated">
+                        Ajouter au panier
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun produit pour le moment.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

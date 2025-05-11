@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class="ui container" style="margin-top: 2em;">
-    <h1 class="ui header">Bienvenue sur notre boutique</h1>
+    <h1 class="ui header">Bienvenue sur ma boutique de jeux-vidéos</h1>
 
     <div class="ui three stackable cards">
         {% for product in products %}
@@ -19,7 +19,7 @@
                 <div class="content">
                     <div class="header">{{ product.name }}</div>
                     <div class="description">
-                        {{ product.description|slice(0, 100) ~ '...' }}
+                        {{ product.description|slice(0, 100) }}
                     </div>
                 </div>
                 <div class="extra content">

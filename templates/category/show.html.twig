@@ -2,31 +2,77 @@
 
 {% block title %}{{ category.name }}{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .ui.card {
+            background-color: white !important;
+            color: black !important;
+        }
+        .ui.card .content {
+            color: black !important;
+        }
+        .ui.button.primary {
+            background-color: #2185d0;
+            color: white;
+        }
+        .ui.button.primary:hover {
+            background-color: #1678b8;
+        }
+        p{
+            color:white;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
-    <h1>{{ category.name }}</h1>
+<div class="ui container" style="margin-top: 2em;">
+    <h1 class="ui header">{{ category.name }}</h1>
     <p>{{ category.description }}</p>
 
     {% if category.products|length > 0 %}
-        <ul>
+        <div class="ui stackable three cards">
             {% for product in category.products %}
-                <li style="margin-bottom: 1.5rem;">
-                    <strong>{{ product.name }}</strong> – {{ product.priceHT }} €
-                    <br>
-                    <em>{{ product.description }}</em>
-                    <br>
-                    {% if product.mainImage %}
-                        <img src="{{ asset(product.mainImage.path) }}" alt="{{ product.name }}" width="200">
-                        <a href="{{ path('cart_add', {id: product.id}) }}" class="btn btn-primary">Ajouter au panier</a>
-
-                    {% else %}
-                        <p>Pas d'image</p>
-                    {% endif %}
-                </li>
+                <div class="ui card">
+                    <div class="image ui center aligned">
+                        {% if product.mainImage %}
+                            <img class="ui medium image" src="{{ asset(product.mainImage.path) }}" alt="{{ product.name }}" style="object-fit: cover; height: 200px; width: auto;">
+                        {% else %}
+                            <div class="ui placeholder segment">
+                                <div class="ui icon header">
+                                    <i class="image icon"></i>
+                                    Pas d'image
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="content">
+                        <div class="header">{{ product.name }}</div>
+                        <div class="meta">
+                            <span class="price">{{ product.priceHT }} €</span>
+                        </div>
+                        <div class="description">
+                            {{ product.description }}
+                        </div>
+                    </div>
+                    <div class="extra content">
+                        <a href="{{ path('cart_add', {id: product.id}) }}" class="ui button primary">
+                            Ajouter au panier
+                        </a>
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
     {% else %}
-        <p><em>Aucun produit trouvé dans cette catégorie.</em></p>
+        <div class="ui message warning">
+            <div class="header">Aucun produit trouvé dans cette catégorie.</div>
+        </div>
     {% endif %}
 
-    <a href="{{ path('category_index') }}">← Retour aux catégories</a>
+    <br>
+    
+    <a href="{{ path('category_index') }}" class="ui button">
+        ← Retour aux catégories
+    </a>
+</div>
 {% endblock %}

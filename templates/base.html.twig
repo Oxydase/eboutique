@@ -60,11 +60,13 @@
         {% block header %}
             <div class="ui menu">
                 <div class="header item">
-                    <i class="shopping bag icon"></i> Ma e-Boutique
+                    <i class="shopping bag icon"></i> e-Boutique de Milton
                 </div>
 
                 <a href="{{ path('app_home') }}" class="item">Accueil</a>
                 <a href="{{ path('category_index') }}" class="item">Catégories</a>
+                <a href="{{ path('product_list') }}" class="item">Produits</a>
+
 
                 <div class="right menu">
                     {% if app.user %}
@@ -76,16 +78,24 @@
                                 <div class="ui red circular label">{{ totalItems }}</div>
                             {% endif %}
                         </a>
+                        {% if 'ROLE_ADMIN' in app.user.roles %}
+                            <a href="{{ path('admin_product_index') }}" class="item">
+                                <i class="cogs icon"></i> Administration
+                            </a>
+                        {% endif %}
 
-                        <div class="item">
-                            <i class="user icon"></i> {{ app.user.email }}
-                        </div>
+                        <a href="{{ path('user_profile') }}" class="item">
+                            <i class="user icon"></i> Mon profil
+                        </a>
                         <a href="{{ path('app_logout') }}" class="item">
                             <i class="sign out alternate icon"></i> Déconnexion
                         </a>
                     {% else %}
                         <a href="{{ path('app_login') }}" class="item">
                             <i class="sign in alternate icon"></i> Connexion
+                        </a>
+                        <a href="{{ path('app_register') }}" class="item">
+                            <i class="edit icon"></i> Inscription
                         </a>
                     {% endif %}
                 </div>
